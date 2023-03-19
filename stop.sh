@@ -1,6 +1,8 @@
 #!/bin/bash
 
 stop() {
+    clear
+    
     # Screen window in which the server is running
     screen_session=$1
 

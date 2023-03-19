@@ -2,6 +2,11 @@
 
 # Paramaters: directory, world, screen_session
 backup() {
+   clear
+   
+   # Source the start script to start the server at the end
+   source ./start.sh
+
    # Destination of the server (/home/minecraft/[SERVER])
    directory=$1
 
@@ -25,15 +30,20 @@ backup() {
 
    screen_say() {
       local command=$1
-      screen -S $screen_session -X stuff command
+      screen -S $screen_session -X stuff "$command"
    }
 
    # Warn online players that server is restarting in 1 minute
-   printf "Informing players that server is restarting.\nServer will begin backup in 60 seconds.\n"
+   printf "Informing players that server is restarting.\n"
+   for i in {60..1}
+   do
+      printf "Server will begin backup in $i seconds...\r"
+      sleep 1
+   done &
    screen_say "say Warning! Server is restarting in 1 minute!^M"
    sleep 10
    screen_say "/save-all^M"
-   sleep 3
+   sleep 40
    screen_say "say Restarting in 10 seconds...^M"
    sleep 5
    for i in {5..1}
@@ -44,7 +54,7 @@ backup() {
 
    # Stopping the server
    screen_say "stop^M"
-   echo "Server stopped."
+   printf "\nServer stopped.\n"
 
    # Print status of the backup
    printf "\nBacking up $backup_files to $dest/$archive_file\n"
@@ -52,14 +62,13 @@ backup() {
    # Back the files to tar file
    tar czf $dest/$archive_file $backup_files
 
+   # Start the server
+   start "$directory" "$screen_session"
+
    # Print finnishing message
    printf "\nBackup Finished\n$date\n"
 
    # List of all the files in $dest with file sizes
-   echo "Listing all current backups in $dest"
+   printf "\nListing all current backups in $dest"
    ls -lh $dest
-
-   # Start server
-   printf "\nStarting server...\n"
-   sh $directory/scripts/start.sh
 }

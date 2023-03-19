@@ -16,7 +16,7 @@ options=(1 "Backup"
 choice=$(dialog --clear \
                 --title "SMP" \
                 --menu "Select a script to execute:" \
-                15 40 6 \
+                15 40 5 \
                 "${options[@]}" \
                 2>&1 >/dev/tty)
 
