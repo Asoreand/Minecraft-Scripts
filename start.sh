@@ -1,6 +1,6 @@
 #!/bin/sh
 
-# Start the minecraft server in a detached screen with 2GB RAM
+# Start the minecraft server in a detached screen
 start() {
     clear
     
@@ -10,8 +10,11 @@ start() {
     # Name of screen session
     screen_session=$2
 
-    echo "Starting Minecraft server..."
+    # Amount of RAM to use for the server (2G or 2048M)
+    ram=$3
+
+    echo "Starting Minecraft server with $ram ram..."
 
     cd $directory
-    screen -S $screen_session -d -m java -Xmx2G -jar server.jar nogui
+    screen -S $screen_session -d -m java -Xmx$ram -jar server.jar nogui
 }
