@@ -1,9 +1,21 @@
 #!/bin/bash
 
-source ./backup.sh
-source ./start.sh
-source ./stop.sh
-source ./stop-now.sh
+# Destination of the server (/home/minecraft/[SERVER_FOLDER])
+directory=/home/minecraft/smp
+
+# Name of the world files (Also called "level-name" in server.properties)
+world=smp
+ 
+# Name of the screen window where the server is running
+screen_session=smp
+
+# Amount of RAM to use for the server (2G or 2048M)
+ram="5G"
+
+source /home/minecraft/scripts/backup.sh
+source /home/minecraft/scripts/start.sh
+source /home/minecraft/scripts/stop.sh
+source /home/minecraft/scripts/stop-now.sh
 
 # Define the menu options
 options=(1 "Backup"
@@ -22,9 +34,9 @@ choice=$(dialog --clear \
 
 # Execute the selected script
 case $choice in
-    1) backup "/home/minecraft/smp" "smp" "smp";;
-    2) start "/home/minecraft/smp" "smp";;
-    3) stop "smp";;
-    4) stop-now "smp";;
-    5) /home/minecraft/server_manager.sh;;
+    1) backup "$directory" "$world" "$screen_session" "$ram";;
+    2) start "$directory" "$screen_session" "$ram";;
+    3) stop "$screen_session";;
+    4) stop-now "$screen_session";;
+    5) /home/minecraft/scripts/server_manager.sh;;
 esac
